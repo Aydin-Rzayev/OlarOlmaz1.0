@@ -37,6 +37,10 @@ public class ProductModel {
         this.ingredients = ingr;
     }
 
+    public Integer getId(){
+        return this.Id;
+    }
+
     public String getProductName(){
         return this.productName;
     }

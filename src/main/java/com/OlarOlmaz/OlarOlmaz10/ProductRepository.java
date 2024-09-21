@@ -7,5 +7,5 @@ import com.OlarOlmaz.OlarOlmaz10.models.ProductModel;;
 
 @Repository
 public interface ProductRepository extends CrudRepository<ProductModel, Integer> {
-
+    
 }
