@@ -2,8 +2,8 @@ package com.OlarOlmaz.OlarOlmaz10.models;
 
 
 
-import org.hibernate.*;
 
+import org.hibernate.*;
 import jakarta.persistence.*;
 
 

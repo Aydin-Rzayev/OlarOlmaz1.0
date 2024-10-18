@@ -1,15 +1,12 @@
 package com.OlarOlmaz.OlarOlmaz10;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
+
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Optionals;
 import org.springframework.stereotype.Service;
 
 import com.OlarOlmaz.OlarOlmaz10.models.ProductModel;
@@ -30,10 +27,11 @@ public class ProductService {
                         .collect(Collectors.toList());
     }
 
-    public ProductModel findById(Integer id){
+    public Optional<ProductModel> findById(Integer id){
         return productRepository.findById(id);
     }
 
+    
     public boolean existsProduct(ProductModel product){
         return productRepository.findAll().equals(product);
     }

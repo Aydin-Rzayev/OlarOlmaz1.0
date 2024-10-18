@@ -1,6 +1,5 @@
 package com.OlarOlmaz.OlarOlmaz10.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,9 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.HttpClientErrorException;
 
-import com.OlarOlmaz.OlarOlmaz10.ProductRepository;
+
 import com.OlarOlmaz.OlarOlmaz10.ProductService;
 import com.OlarOlmaz.OlarOlmaz10.models.ProductModel;
 
@@ -148,7 +146,11 @@ public class AdminController{
     }
 
     @PostMapping(path = "/products/add")
-    public ResponseEntity<ProductModel> addProduct(@RequestBody ProductModel product){
+    public ResponseEntity<ProductModel> addProduct(@RequestParam String productName, @RequestParam boolean permissionOfUsage, @RequestParam String ingredients){
+        ProductModel product = new ProductModel();
+        product.setProductName(productName);
+        product.setPermissionOfUsage(permissionOfUsage);
+        product.setIngredient(ingredients);
         if(productService.existsProduct(product)){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(product);
         }
@@ -156,7 +158,7 @@ public class AdminController{
         return ResponseEntity.ok(product);
     }
 
-    @PutMapping(path = "/products/update/{productId}")
+    /*@PutMapping(path = "/products/update/{productId}")
     public ResponseEntity<ProductModel> updateProductName(@PathVariable Integer productId, @RequestParam String productName){
         Optional<ProductModel> existingProductOptional = Optional.of(productService.findById(productId));
         if(!existingProductOptional.isPresent()){
@@ -167,7 +169,42 @@ public class AdminController{
         existingProduct.setProductName(productName);
         productService.saveProduct(existingProduct);
         return ResponseEntity.ok(existingProduct);
+    }*/
+
+    @PutMapping(path = "/products/update/{productId}/{updateParam}")
+    public ResponseEntity<ProductModel> updateProductName(@PathVariable Integer productId, @PathVariable String updateParam, @RequestBody String updateValue){
+        Optional<ProductModel> existingProductOptional = productService.findById(productId);
+        if(!existingProductOptional.isPresent()){
+            return ResponseEntity.notFound().build();
+        }
+        ProductModel existingProduct = existingProductOptional.get();
+        switch (updateParam) {
+            case "productName":
+                existingProduct.setProductName(updateValue);
+                break;
+            case "permissionOfUsage":
+                existingProduct.setProductName(updateValue);
+                break;
+            case "ingredients":
+                existingProduct.setProductName(updateValue);
+                break;
+            default:
+                return ResponseEntity.badRequest().build();
+        }
+        productService.saveProduct(existingProduct);
+        return ResponseEntity.ok(existingProduct);
+        
     }
 
+    @DeleteMapping(path = "/products/delete/{productId}")
+    public ResponseEntity<ProductModel> deleteProduct(@PathVariable Integer productId){
+        Optional<ProductModel> existingProductOptional = productService.findById(productId);
+        if(!existingProductOptional.isPresent()){
+            return ResponseEntity.notFound().build();
+        }
+        ProductModel existingProduct = existingProductOptional.get();
+        productService.deleteProduct(existingProduct);
+        return ResponseEntity.ok().build();
+    }
     //Needs other paramters to be updated
 }
